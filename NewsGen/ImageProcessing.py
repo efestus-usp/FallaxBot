@@ -27,12 +27,12 @@ def setHeadline(text):
     fontR = ImageFont.truetype("Arial.ttf", 9)
 
     # Draw the text
-    if len(text) > 50:
+    if len(text) > 45:
         array = text.split(' ')
         str1 = ""
         str2 = ""
         i = 0
-        while(len(str1) < 50):
+        while(len(str1) < 45):
             str1 += array[i] + ' '
             i += 1
 
