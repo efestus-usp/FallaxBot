@@ -17,8 +17,33 @@ import json
 def get_soup(url, header):
     return BeautifulSoup(urllib2.urlopen(urllib2.Request(url, headers=header)), 'html.parser')
 
-def run():
+def checkVerb(str):
+    link = "https://www.dicio.com.br/pesquisa.php?q=" + str
+    html = requests.get(link).text
+    soup = BeautifulSoup(html, 'html.parser')
 
+    p = soup.find("li")
+
+    if str in p.get_text().lower():
+        if "verb" in p.get_text().lower():
+            if not "pron" in p.get_text().lower():
+                return True
+
+    for p in soup.find_all("span", {"class": "cl"}):
+        if "verbo" in p.get_text().lower():
+            return True
+
+        if "contração" in p.get_text().lower():
+            return False
+
+        if "advérbio" in p.get_text().lower():
+            return False
+
+        for p in soup.find_all("p", {"class": "adicional"}):
+            if "verbo" in p.get_text().lower():
+                return True
+
+def run():
     text = ""
 
     #BBC
@@ -71,7 +96,7 @@ def run():
 
     if beginSelection == 0:
         array = textBBC.split()
-        for str in array:
+        for index, str in enumerate(array):
             verb = False
             text += str + ' '
             link = "https://www.dicio.com.br/pesquisa.php?q=" + str
@@ -105,10 +130,12 @@ def run():
                         break
 
             if verb:
+                if checkVerb(array[index + 1]):
+                    text += array[index + 1] + ' '
                 break
     elif beginSelection == 1:
         array = textG1.split()
-        for str in array:
+        for index, str in enumerate(array):
             verb = False
             text += str + ' '
             link = "https://www.dicio.com.br/pesquisa.php?q=" + str
@@ -142,10 +169,12 @@ def run():
                         break
 
             if verb:
+                if checkVerb(array[index + 1]):
+                    text += array[index + 1] + ' '
                 break
     elif beginSelection == 2:
         array = textOD.split()
-        for str in array:
+        for index, str in enumerate(array):
             verb = False
             text += str + ' '
             link = "https://www.dicio.com.br/pesquisa.php?q=" + str
@@ -179,6 +208,8 @@ def run():
                         break
 
             if verb:
+                if checkVerb(array[index + 1]):
+                    text += array[index + 1] + ' '
                 break
 
     print(text)
@@ -460,11 +491,15 @@ def run():
                                 break
                             break
 
+    text2 = text2[0].lower() + text2[1:]
     text = text + text2
     text = "\n" + text
     text = text.replace('- ', '')
     text = text.replace("'", "")
     print(text)
+
+    if len(text) > 100:
+        return ""
 
     query = text.encode('ascii', 'ignore').decode('ascii')
     image_type = "ActiOn"
@@ -482,14 +517,14 @@ def run():
         ActualImages.append((link, Type))
 
     ###print images
-    j = random.randint(0, 30)
+    j = random.randint(0, 15)
 
     for i, (img, Type) in enumerate(ActualImages):
         if i == j:
             break
 
     while "x-raw-image" in img:
-        j = random.randint(0, 30)
+        j = random.randint(0, 15)
 
         for i, (img, Type) in enumerate(ActualImages):
             if i == j:
@@ -504,7 +539,7 @@ def run():
         print
         'Could not download page'
     except:
-        j = random.randint(0, 30)
+        j = random.randint(0, 15)
 
         for i, (img, Type) in enumerate(ActualImages):
             if i == j:
@@ -518,6 +553,5 @@ def run():
     else:
         print
         'downloaded successfully'
-
 
     return text
