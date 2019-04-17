@@ -1,4 +1,6 @@
-import requests, random, shutil
+import requests, random, shutil, time
+
+from requests.exceptions import HTTPError
 try:
     import urllib.request as urllib2
 except ImportError:
@@ -181,6 +183,8 @@ def run():
 
     print(text)
 
+    time.sleep(3)
+
     ## NEW SENTENCES
 
     #BBC
@@ -231,16 +235,55 @@ def run():
 
     ## GET ANOTHER SENTENCE TO SUM
 
-    endSelection = random.randint(0, 2)
+    text2 = ""
     verb = False
     check = True
 
-    if endSelection == 0:
-        array = textBBC.split()
-        for strlst in array:
-            if verb:
-                if check:
-                    ## CHECK IF IT'S A CASE OF TWO VERBS
+    while(text2 == ""):
+        endSelection = random.randint(0, 2)
+        if endSelection == 0:
+            array = textBBC.split()
+            for strlst in array:
+                if verb:
+                    if check:
+                        ## CHECK IF IT'S A CASE OF TWO VERBS
+                        link = "https://www.dicio.com.br/pesquisa.php?q=" + strlst
+                        html = requests.get(link).text
+                        soup = BeautifulSoup(html, 'html.parser')
+
+                        p = soup.find("li")
+
+                        if strlst in p.get_text().lower():
+                            if "verb" in p.get_text().lower():
+                                if "pron" in p.get_text().lower():
+                                    continue
+                                else:
+                                    check = False
+
+                        for p in soup.find_all("span", {"class": "cl"}):
+                            if "verbo" in p.get_text().lower():
+                                check = False
+                                break
+
+                            if "contração" in p.get_text().lower():
+                                break
+
+                            if "advérbio" in p.get_text().lower():
+                                break
+
+                            for p in soup.find_all("p", {"class": "adicional"}):
+                                if "verbo" in p.get_text().lower():
+                                    check = False
+                                    break
+                                break
+
+                        if check:
+                            text2 += strlst + ' '
+
+                        check = False
+                    else:
+                        text2 += strlst + ' '
+                else:
                     link = "https://www.dicio.com.br/pesquisa.php?q=" + strlst
                     html = requests.get(link).text
                     soup = BeautifulSoup(html, 'html.parser')
@@ -252,11 +295,11 @@ def run():
                             if "pron" in p.get_text().lower():
                                 continue
                             else:
-                                check = False
+                                verb = True
 
                     for p in soup.find_all("span", {"class": "cl"}):
                         if "verbo" in p.get_text().lower():
-                            check = False
+                            verb = True
                             break
 
                         if "contração" in p.get_text().lower():
@@ -267,54 +310,53 @@ def run():
 
                         for p in soup.find_all("p", {"class": "adicional"}):
                             if "verbo" in p.get_text().lower():
-                                check = False
+                                verb = True
                                 break
                             break
 
+        elif endSelection == 1:
+            array = textG1.split()
+            for strlst in array:
+
+                if verb:
                     if check:
-                        text += strlst + ' '
+                        ## CHECK IF IT'S A CASE OF TWO VERBS
+                        link = "https://www.dicio.com.br/pesquisa.php?q=" + strlst
+                        html = requests.get(link).text
+                        soup = BeautifulSoup(html, 'html.parser')
 
-                    check = False
+                        p = soup.find("li")
+
+                        if strlst in p.get_text().lower():
+                            if "verb" in p.get_text().lower():
+                                if "pron" in p.get_text().lower():
+                                    continue
+                                else:
+                                    check = False
+
+                        for p in soup.find_all("span", {"class": "cl"}):
+                            if "verbo" in p.get_text().lower():
+                                check = False
+                                break
+
+                            if "contração" in p.get_text().lower():
+                                break
+
+                            if "advérbio" in p.get_text().lower():
+                                break
+
+                            for p in soup.find_all("p", {"class": "adicional"}):
+                                if "verbo" in p.get_text().lower():
+                                    check = False
+                                    break
+
+                        if check:
+                            text2 += strlst + ' '
+
+                        check = False
+                    else:
+                        text2 += strlst + ' '
                 else:
-                    text += strlst + ' '
-            else:
-                link = "https://www.dicio.com.br/pesquisa.php?q=" + strlst
-                html = requests.get(link).text
-                soup = BeautifulSoup(html, 'html.parser')
-
-                p = soup.find("li")
-
-                if strlst in p.get_text().lower():
-                    if "verb" in p.get_text().lower():
-                        if "pron" in p.get_text().lower():
-                            continue
-                        else:
-                            verb = True
-
-                for p in soup.find_all("span", {"class": "cl"}):
-                    if "verbo" in p.get_text().lower():
-                        verb = True
-                        break
-
-                    if "contração" in p.get_text().lower():
-                        break
-
-                    if "advérbio" in p.get_text().lower():
-                        break
-
-                    for p in soup.find_all("p", {"class": "adicional"}):
-                        if "verbo" in p.get_text().lower():
-                            verb = True
-                            break
-                        break
-
-    elif endSelection == 1:
-        array = textG1.split()
-        for strlst in array:
-
-            if verb:
-                if check:
-                    ## CHECK IF IT'S A CASE OF TWO VERBS
                     link = "https://www.dicio.com.br/pesquisa.php?q=" + strlst
                     html = requests.get(link).text
                     soup = BeautifulSoup(html, 'html.parser')
@@ -326,11 +368,11 @@ def run():
                             if "pron" in p.get_text().lower():
                                 continue
                             else:
-                                check = False
+                                verb = True
 
                     for p in soup.find_all("span", {"class": "cl"}):
                         if "verbo" in p.get_text().lower():
-                            check = False
+                            verb = True
                             break
 
                         if "contração" in p.get_text().lower():
@@ -341,53 +383,53 @@ def run():
 
                         for p in soup.find_all("p", {"class": "adicional"}):
                             if "verbo" in p.get_text().lower():
+                                verb = True
+                                break
+                            break
+
+        elif endSelection == 2:
+            array = textOD.split()
+            for strlst in array:
+
+                if verb:
+                    if check:
+                        ## CHECK IF IT'S A CASE OF TWO VERBS
+                        link = "https://www.dicio.com.br/pesquisa.php?q=" + strlst
+                        html = requests.get(link).text
+                        soup = BeautifulSoup(html, 'html.parser')
+
+                        p = soup.find("li")
+
+                        if strlst in p.get_text().lower():
+                            if "verb" in p.get_text().lower():
+                                if "pron" in p.get_text().lower():
+                                    continue
+                                else:
+                                    check = False
+
+                        for p in soup.find_all("span", {"class": "cl"}):
+                            if "verbo" in p.get_text().lower():
                                 check = False
                                 break
 
-                    if check:
-                        text += strlst + ' '
+                            if "contração" in p.get_text().lower():
+                                break
 
-                    check = False
+                            if "advérbio" in p.get_text().lower():
+                                break
+
+                            for p in soup.find_all("p", {"class": "adicional"}):
+                                if "verbo" in p.get_text().lower():
+                                    check = False
+                                    break
+
+                        if check:
+                            text2 += strlst + ' '
+
+                        check = False
+                    else:
+                        text2 += strlst + ' '
                 else:
-                    text += strlst + ' '
-            else:
-                link = "https://www.dicio.com.br/pesquisa.php?q=" + strlst
-                html = requests.get(link).text
-                soup = BeautifulSoup(html, 'html.parser')
-
-                p = soup.find("li")
-
-                if strlst in p.get_text().lower():
-                    if "verb" in p.get_text().lower():
-                        if "pron" in p.get_text().lower():
-                            continue
-                        else:
-                            verb = True
-
-                for p in soup.find_all("span", {"class": "cl"}):
-                    if "verbo" in p.get_text().lower():
-                        verb = True
-                        break
-
-                    if "contração" in p.get_text().lower():
-                        break
-
-                    if "advérbio" in p.get_text().lower():
-                        break
-
-                    for p in soup.find_all("p", {"class": "adicional"}):
-                        if "verbo" in p.get_text().lower():
-                            verb = True
-                            break
-                        break
-
-    elif endSelection == 2:
-        array = textOD.split()
-        for strlst in array:
-
-            if verb:
-                if check:
-                    ## CHECK IF IT'S A CASE OF TWO VERBS
                     link = "https://www.dicio.com.br/pesquisa.php?q=" + strlst
                     html = requests.get(link).text
                     soup = BeautifulSoup(html, 'html.parser')
@@ -399,11 +441,11 @@ def run():
                             if "pron" in p.get_text().lower():
                                 continue
                             else:
-                                check = False
+                                verb = True
 
                     for p in soup.find_all("span", {"class": "cl"}):
                         if "verbo" in p.get_text().lower():
-                            check = False
+                            verb = True
                             break
 
                         if "contração" in p.get_text().lower():
@@ -414,51 +456,15 @@ def run():
 
                         for p in soup.find_all("p", {"class": "adicional"}):
                             if "verbo" in p.get_text().lower():
-                                check = False
+                                verb = True
                                 break
-
-                    if check:
-                        text += strlst + ' '
-
-                    check = False
-                else:
-                    text += strlst + ' '
-            else:
-                link = "https://www.dicio.com.br/pesquisa.php?q=" + strlst
-                html = requests.get(link).text
-                soup = BeautifulSoup(html, 'html.parser')
-
-                p = soup.find("li")
-
-                if strlst in p.get_text().lower():
-                    if "verb" in p.get_text().lower():
-                        if "pron" in p.get_text().lower():
-                            continue
-                        else:
-                            verb = True
-
-                for p in soup.find_all("span", {"class": "cl"}):
-                    if "verbo" in p.get_text().lower():
-                        verb = True
-                        break
-
-                    if "contração" in p.get_text().lower():
-                        break
-
-                    if "advérbio" in p.get_text().lower():
-                        break
-
-                    for p in soup.find_all("p", {"class": "adicional"}):
-                        if "verbo" in p.get_text().lower():
-                            verb = True
                             break
-                        break
 
+    text = text + text2
     text = "\n" + text
-    text = text.replace('-', '')
+    text = text.replace('- ', '')
     text = text.replace("'", "")
     print(text)
-
 
     query = text.encode('ascii', 'ignore').decode('ascii')
     image_type = "ActiOn"
@@ -476,15 +482,42 @@ def run():
         ActualImages.append((link, Type))
 
     ###print images
-    j = random.randint(0, 10)
+    j = random.randint(0, 30)
 
     for i, (img, Type) in enumerate(ActualImages):
         if i == j:
             break
 
-    response = requests.get(img, stream=True)
-    with open('Source.jpg', 'wb') as out_file:
-        shutil.copyfileobj(response.raw, out_file)
-    del response
+    while "x-raw-image" in img:
+        j = random.randint(0, 30)
+
+        for i, (img, Type) in enumerate(ActualImages):
+            if i == j:
+                break
+
+    try:
+        response = requests.get(img, stream=True)
+        with open('Source.jpg', 'wb') as out_file:
+            shutil.copyfileobj(response.raw, out_file)
+        del response
+    except HTTPError:
+        print
+        'Could not download page'
+    except:
+        j = random.randint(0, 30)
+
+        for i, (img, Type) in enumerate(ActualImages):
+            if i == j:
+                break
+
+        response = requests.get(img, stream=True)
+        with open('Source.jpg', 'wb') as out_file:
+            shutil.copyfileobj(response.raw, out_file)
+        del response
+
+    else:
+        print
+        'downloaded successfully'
+
 
     return text

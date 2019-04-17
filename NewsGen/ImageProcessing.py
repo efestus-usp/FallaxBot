@@ -2,10 +2,24 @@ from PIL import ImageFont, ImageDraw, Image
 import numpy as np
 import cv2
 
+str1 = "Incrivelmente surpreendente"
+str2 = "Uma verdadeira evolução para o mundo moderno"
+str3 = "Grande impacto na tecnologia"
+str4 = "Grande inovação no mercado"
+str5 = "Espara-se um grande impacto na política"
+str6 = "A tecnologia mudando a política"
+str7 = "Hora de repensar a ética na tecnologia"
+str8 = "Autoridades se surpreenderam com a notícia"
+str9 = "O governo não se pronunciou ainda"
+str10 = "Facebook tenta averiguar a situação"
+
 def setHeadline(text):
     img1 = cv2.imread("Source.jpg", -1)
     img2 = cv2.imread("Template.png", -1) # this one has transparency
     h, w, c = img2.shape
+
+    if img1 is None:
+        print("test")
 
     img1 = cv2.resize(img1, (w, h), interpolation = cv2.INTER_CUBIC)
     result = np.zeros((h, w, 3), np.uint8)
