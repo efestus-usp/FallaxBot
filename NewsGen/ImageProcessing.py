@@ -6,7 +6,7 @@ str1 = "Incrivelmente surpreendente. Grande exemplo."
 str2 = "Uma verdadeira evolução para o mundo moderno."
 str3 = "Grande impacto na tecnologia."
 str4 = "Grande inovação no mercado."
-str5 = "Espara-se um grande impacto na política."
+str5 = "Espera-se um grande impacto na política."
 str6 = "A tecnologia mudando a política."
 str7 = "Hora de repensar a ética na tecnologia."
 str8 = "Autoridades se surpreenderam com a notícia."
@@ -91,7 +91,4 @@ def setHeadline(text):
     # Get back the image to OpenCV
     result = cv2.cvtColor(np.array(pil_im), cv2.COLOR_RGB2BGR)
 
-    cv2.imshow("result", result)
     cv2.imwrite('Result.png', result)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
