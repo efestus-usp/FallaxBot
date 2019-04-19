@@ -491,7 +491,6 @@ def run():
                                 break
                             break
 
-    text2 = text2[0].lower() + text2[1:]
     text = text + text2
     text = "\n" + text
     text = text.replace('- ', '')
@@ -535,23 +534,7 @@ def run():
         with open('Source.jpg', 'wb') as out_file:
             shutil.copyfileobj(response.raw, out_file)
         del response
-    except HTTPError:
-        print
-        'Could not download page'
     except:
-        j = random.randint(0, 15)
-
-        for i, (img, Type) in enumerate(ActualImages):
-            if i == j:
-                break
-
-        response = requests.get(img, stream=True)
-        with open('Source.jpg', 'wb') as out_file:
-            shutil.copyfileobj(response.raw, out_file)
-        del response
-
-    else:
-        print
-        'downloaded successfully'
+        return ""
 
     return text

@@ -18,8 +18,10 @@ def setHeadline(text):
     img2 = cv2.imread("Template.png", -1) # this one has transparency
     h, w, c = img2.shape
 
-    if img1 is None:
-        print("test")
+    height, width = img1.shape[0:2]
+
+    if height > 1000 and width > 800:
+        img1 = img1[0: 600, 0:600]
 
     img1 = cv2.resize(img1, (w, h), interpolation = cv2.INTER_CUBIC)
     result = np.zeros((h, w, 3), np.uint8)
