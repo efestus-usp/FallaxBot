@@ -61,7 +61,7 @@ def setHeadline(text):
         draw.text((10, 214), txt1, font=font, fill=(0, 0, 0))
         draw.text((10, 246), txt2, font=font, fill=(0, 0, 0))
 
-    if not re.search('[a-zA-Z]', txt2):
+    if not re.search('[a-zA-z0-9]', txt2):
         draw.text((10, 214), text, font=font, fill=(0, 0, 0))
         rnd = random.randint(0, 9)
 
