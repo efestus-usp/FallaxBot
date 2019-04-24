@@ -17,15 +17,17 @@ f= open("input.txt", "w+")
 
 i = 1
 
-while(i < 2057):
+# OLHAR DIGITAL
+while(i < 4581):
     print(i)
-    text = ""
 
-    link = "https://olhardigital.com.br/noticias/" + str(i)
-    html = requests.get(link).text
-    soup = BeautifulSoup(html, 'html.parser')
+    link = "https://gizmodo.uol.com.br/page/"+ str(i) +"/"
+    html = requests.get(link)
+    html.raise_for_status()
+    html.encoding = "UTF-8"
+    soup = BeautifulSoup(html.text, 'html.parser')
 
-    for p in soup.find_all("h3"):
+    for p in soup.find_all("a", {"rel": "bookmark"}):
         print(p.get_text().rstrip() + "\n")
         f.write(p.get_text().rstrip() + "\n\n")
 
