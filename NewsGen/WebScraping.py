@@ -1,7 +1,6 @@
-import requests, random, shutil, time
+import random, time
 import cogroo_interface as Cogroo
 
-from requests.exceptions import HTTPError
 try:
     import urllib.request as urllib2
 except ImportError:
@@ -13,7 +12,6 @@ except ImportError:
 
 from bs4 import BeautifulSoup
 import requests
-import json
 
 cogroo = Cogroo.Cogroo.Instance()
 
@@ -310,43 +308,6 @@ def run():
     print(text)
 
     if len(text) > 100:
-        return ""
-
-    query = text.encode('ascii', 'ignore').decode('ascii')
-    image_type = "ActiOn"
-    query = query.split()
-    query = '+'.join(query)
-    url = "https://www.google.co.in/search?q=" + query + "&source=lnms&tbm=isch"
-    header = {
-        'User-Agent': "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36"
-        }
-    soup = get_soup(url, header)
-
-    ActualImages = []  # contains the link for Large original images, type of  image
-    for a in soup.find_all("div", {"class": "rg_meta"}):
-        link, Type = json.loads(a.text)["ou"], json.loads(a.text)["ity"]
-        ActualImages.append((link, Type))
-
-    ###print images
-    j = random.randint(0, 15)
-
-    for i, (img, Type) in enumerate(ActualImages):
-        if i == j:
-            break
-
-    while "x-raw-image" in img:
-        j = random.randint(0, 15)
-
-        for i, (img, Type) in enumerate(ActualImages):
-            if i == j:
-                break
-
-    try:
-        response = requests.get(img, stream=True)
-        with open('Source.jpg', 'wb') as out_file:
-            shutil.copyfileobj(response.raw, out_file)
-        del response
-    except:
         return ""
 
     return text
