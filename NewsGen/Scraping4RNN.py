@@ -17,7 +17,7 @@ f= open("input.txt", "w+")
 
 i = 1
 
-# OLHAR DIGITAL
+# GIZMODO
 while(i < 4581):
     print(i)
 

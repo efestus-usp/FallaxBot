@@ -39,7 +39,7 @@ def setHeadline(text):
 
     draw = ImageDraw.Draw(pil_im)
     # use a truetype font
-    font = ImageFont.truetype("arial-bold.ttf", 13)
+    font = ImageFont.truetype("arial-bold.ttf", 14)
     fontR = ImageFont.truetype("Arial.ttf", 9)
     fontC = ImageFont.truetype("Arial.ttf", 10)
 
@@ -58,35 +58,35 @@ def setHeadline(text):
             txt2 += array[i] + ' '
             i += 1
 
-        draw.text((10, 214), txt1, font=font, fill=(0, 0, 0))
-        draw.text((10, 246), txt2, font=font, fill=(0, 0, 0))
+        draw.text((12, 240), txt1, font=font, fill=(0, 0, 0))
+        draw.text((12, 275), txt2, font=font, fill=(0, 0, 0))
 
     if not re.search('[a-zA-z0-9]', txt2):
-        draw.text((10, 214), text, font=font, fill=(0, 0, 0))
+        draw.text((12, 240), text, font=font, fill=(0, 0, 0))
         rnd = random.randint(0, 9)
 
         if rnd == 0:
-            draw.text((10, 250), str1, font=fontC, fill=(80, 80, 80))
+            draw.text((12, 278), str1, font=fontC, fill=(80, 80, 80))
         elif rnd == 1:
-            draw.text((10, 250), str2, font=fontC, fill=(80, 80, 80))
+            draw.text((12, 278), str2, font=fontC, fill=(80, 80, 80))
         elif rnd == 2:
-            draw.text((10, 250), str3, font=fontC, fill=(80, 80, 80))
+            draw.text((12, 278), str3, font=fontC, fill=(80, 80, 80))
         elif rnd == 3:
-            draw.text((10, 250), str4, font=fontC, fill=(80, 80, 80))
+            draw.text((12, 278), str4, font=fontC, fill=(80, 80, 80))
         elif rnd == 4:
-            draw.text((10, 250), str5, font=fontC, fill=(80, 80, 80))
+            draw.text((12, 278), str5, font=fontC, fill=(80, 80, 80))
         elif rnd == 5:
-            draw.text((10, 250), str6, font=fontC, fill=(80, 80, 80))
+            draw.text((12, 278), str6, font=fontC, fill=(80, 80, 80))
         elif rnd == 6:
-            draw.text((10, 250), str7, font=fontC, fill=(80, 80, 80))
+            draw.text((12, 278), str7, font=fontC, fill=(80, 80, 80))
         elif rnd == 7:
-            draw.text((10, 250), str8, font=fontC, fill=(80, 80, 80))
+            draw.text((12, 278), str8, font=fontC, fill=(80, 80, 80))
         elif rnd == 8:
-            draw.text((10, 250), str9, font=fontC, fill=(80, 80, 80))
+            draw.text((12, 278), str9, font=fontC, fill=(80, 80, 80))
         elif rnd == 9:
-            draw.text((10, 250), str10, font=fontC, fill=(80, 80, 80))
+            draw.text((12, 278), str10, font=fontC, fill=(80, 80, 80))
 
-    draw.text((12, 214), "FALLAXNEWS.COM", font=fontR, fill=(80, 80, 80))
+    draw.text((12, 242), "FALLAXNEWS.COM", font=fontR, fill=(80, 80, 80))
 
     # Get back the image to OpenCV
     result = cv2.cvtColor(np.array(pil_im), cv2.COLOR_RGB2BGR)
